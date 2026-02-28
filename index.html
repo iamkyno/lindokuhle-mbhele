@@ -36,7 +36,16 @@
       --max-w:     1200px;
     }
 
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html { 
+      scroll-behavior: smooth; 
+      font-size: 16px;
+      scroll-padding-top: 100px; /* Account for fixed nav */
+    }
+
+    /* Smoother scrolling on the entire page */
+    * {
+      scroll-behavior: smooth;
+    }
 
     body {
       background: var(--bg);
@@ -46,6 +55,21 @@
       line-height: 1.7;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══════════════════════════════════════════
+       SCROLL PROGRESS BAR
+    ═══════════════════════════════════════════ */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      z-index: 101;
+      transition: width 0.1s ease-out;
+      box-shadow: 0 0 10px rgba(200, 241, 53, 0.5);
     }
 
     /* SCROLLBAR */
@@ -1128,6 +1152,9 @@
 
 <body>
 
+<!-- ═══════════════════════ SCROLL PROGRESS BAR ═══════════════════════ -->
+<div id="scroll-progress" aria-hidden="true"></div>
+
 <!-- ═══════════════════════ NAV ═══════════════════════ -->
 <nav id="main-nav" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
@@ -1812,6 +1839,49 @@
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ─── Mark JS as loaded so animations work safely ───
   document.body.classList.add('js-loaded');
+
+  // ─── Scroll Progress Bar ───
+  const scrollProgress = document.getElementById('scroll-progress');
+  const updateScrollProgress = () => {
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
+    scrollProgress.style.width = scrollPercent + '%';
+  };
+  
+  window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  window.addEventListener('resize', updateScrollProgress, { passive: true });
+  updateScrollProgress(); // Initial call
+
+  // ─── Enhanced smooth scroll for anchor links ───
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+      
+      // Skip if it's just '#' or empty
+      if (!href || href === '#') return;
+      
+      const targetElement = document.querySelector(href);
+      if (targetElement) {
+        e.preventDefault();
+        
+        // Calculate offset for fixed nav
+        const navHeight = document.getElementById('main-nav')?.offsetHeight || 80;
+        const targetPosition = targetElement.offsetTop - navHeight - 20;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+        
+        // Update URL without jumping
+        if (history.pushState) {
+          history.pushState(null, null, href);
+        }
+      }
+    });
+  });
 
   // ─── Nav scroll effect ───
   const nav = document.getElementById('main-nav');
