@@ -90,7 +90,7 @@
       padding: 0 40px;
     }
 
-    section { padding: 100px 0; position: relative; }
+    section { padding: 80px 0; position: relative; }
 
     .section-label {
       font-family: var(--font-mono);
@@ -717,6 +717,11 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
     }
+    .systems-grid{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
     .project-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -728,6 +733,11 @@
       position: relative;
       overflow: hidden;
     }
+
+    .systems-grid .project-card.featured {
+        grid-column: span 1;
+    }
+
     .project-card::before {
       content: '';
       position: absolute;
@@ -806,15 +816,44 @@
       font-family: var(--font-mono);
       font-size: 11px;
       color: var(--body);
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 5px;
       transition: color var(--transition);
       letter-spacing: 0.05em;
       cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      text-decoration: none;
     }
     .project-link:hover { color: var(--accent); }
     .project-link svg { width: 13px; height: 13px; }
+
+    .project-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--accent);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--accent);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .project-link-btn:hover {
+      background: rgba(200, 241, 53, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(200, 241, 53, 0.15);
+    }
+    .project-link-btn svg { width: 15px; height: 15px; transition: transform var(--transition); }
+    .project-link-btn:hover svg { transform: scale(1.15); }
 
     /* ═══════════════════════════════════════════
        SERVICES
@@ -1058,6 +1097,26 @@
     .footer-links a:hover { color: var(--accent); }
 
     /* ═══════════════════════════════════════════
+       CURSOR TRAIL
+    ═══════════════════════════════════════════ */
+    .cursor-dot {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      opacity: 0.6;
+      transform: translate(-50%, -50%);
+      animation: cursor-fade 0.5s ease forwards;
+      z-index: 9998;
+    }
+    @keyframes cursor-fade {
+      from { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      to   { opacity: 0;   transform: translate(-50%, -50%) scale(0.3); }
+    }
+
+    /* ═══════════════════════════════════════════
        SCROLL ANIMATIONS
     ═══════════════════════════════════════════ */
     .js-loaded .reveal {
@@ -1073,6 +1132,154 @@
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
     .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ═══════════════════════════════════════════
+       MODAL & SLIDER
+    ═══════════════════════════════════════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-overlay.active { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal-content {
+      max-width: 1200px;
+      width: 100%;
+      position: relative;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      color: var(--bright);
+    }
+    .modal-close {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--bright);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 24px;
+    }
+    .modal-close:hover {
+      background: rgba(127, 255, 212, 0.2);
+      border-color: var(--accent);
+      transform: rotate(90deg);
+    }
+    .slider-container {
+      position: relative;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .slider-wrapper {
+      position: relative;
+      padding-bottom: 60%;
+    }
+    .slider-track {
+      display: flex;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+    .slider-slide {
+      flex: 0 0 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .slider-slide img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(127, 255, 212, 0.2);
+      border: 1px solid var(--accent);
+      color: var(--bright);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    .slider-arrow:hover {
+      background: rgba(127, 255, 212, 0.3);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .slider-arrow.prev { left: 20px; }
+    .slider-arrow.next { right: 20px; }
+    .slider-dots {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .slider-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .slider-dot.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: scale(1.2);
+    }
+    .slider-caption {
+      text-align: center;
+      padding: 15px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: rgba(0, 0, 0, 0.3);
+    }
 
     /* ═══════════════════════════════════════════
        MOBILE NAV
@@ -1162,6 +1369,7 @@
     <ul class="nav-links" role="list">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
+      <li><a href="#systems">Systems</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#contact" class="nav-cta">Hire Me</a></li>
@@ -1176,6 +1384,7 @@
 <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
   <a href="#about">About</a>
   <a href="#skills">Skills</a>
+  <a href="#systems">Systems</a>
   <a href="#projects">Projects</a>
   <a href="#services">Services</a>
   <a href="#contact" class="nav-cta">Hire Me</a>
@@ -1479,6 +1688,81 @@
           <span class="skill-tag" role="listitem">Gemini</span>
         </div>
       </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════ CUSTOM SYSTEMS ═══════════════════════ -->
+<section id="systems" aria-labelledby="systems-heading" style="background: linear-gradient(180deg, rgba(127,255,212,0.02) 0%, transparent 100%);">
+  <div class="container">
+    <div class="section-label">Custom Development</div>
+    <h2 id="systems-heading" class="section-title">Production Systems</h2>
+    <p style="text-align: center; max-width: 800px; margin: 0 auto 60px; color: var(--muted); font-size: clamp(1rem, 2vw, 1.1rem);">
+      Enterprise-grade systems built from scratch using Laravel, React, and WhatsApp Business API — currently powering dealership operations across South Africa.
+    </p>
+    <div class="systems-grid">
+
+      <!-- Lead2Call System -->
+      <article class="project-card featured reveal" aria-label="Lead2Call System">
+        <div class="project-num">01 — LIVE SYSTEM</div>
+        <h3 class="project-title">Lead2Call</h3>
+        <p class="project-desc">
+          Automated lead-to-call platform for automotive dealerships. When a customer submits a vehicle enquiry online, 
+          the system immediately initiates an outbound call connecting the customer to the next available salesperson 
+          using a round-robin queue — no manual intervention required.
+        </p>
+        <p class="project-problem">
+          "Salespeople are cycled through in order, and if a salesperson misses the call within a defined window, the system 
+          moves to the next person in the rotation. When a call is missed, the salesperson receives a WhatsApp notification 
+          presenting the lead details in a structured message window."
+        </p>
+        <div class="project-tech" role="list" aria-label="Technologies used">
+          <span class="tech-badge" role="listitem">Laravel 12</span>
+          <span class="tech-badge" role="listitem">React</span>
+          <span class="tech-badge" role="listitem">Inertia.js</span>
+          <span class="tech-badge" role="listitem">Sudonum API</span>
+          <span class="tech-badge" role="listitem">WhatsApp Business API</span>
+          <span class="tech-badge" role="listitem">MySQL</span>
+        </div>
+        <div class="project-links">
+          <button type="button" class="project-link-btn" onclick="openSystemModal('lead2call')" aria-label="View Lead2Call system screenshots">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            View System
+          </button>
+        </div>
+      </article>
+
+      <!-- WhatLead System -->
+      <article class="project-card featured reveal reveal-delay-1" aria-label="WhatLead System">
+        <div class="project-num">02 — LIVE SYSTEM</div>
+        <h3 class="project-title">WhatLead</h3>
+        <p class="project-desc">
+          WhatsApp-powered lead management platform built for automotive dealerships. When a customer submits a vehicle 
+          enquiry, WhatLead's API triggers an automated messaging workflow entirely over WhatsApp Business. The customer 
+          receives an immediate branded response, including the dealership's catalog and the assigned salesperson's contact vCard.
+        </p>
+        <p class="project-problem">
+          "The platform supports multiple dealerships, each with their own WhatsApp Business number(s), salesperson roster, 
+          service configuration, and automation rules. Includes a full conversation dashboard, two-layer template management 
+          system (designs submitted to Meta for approval), and vehicle inventory sync with trackable short links."
+        </p>
+        <div class="project-tech" role="list" aria-label="Technologies used">
+          <span class="tech-badge" role="listitem">Laravel 12</span>
+          <span class="tech-badge" role="listitem">React</span>
+          <span class="tech-badge" role="listitem">Inertia.js v2</span>
+          <span class="tech-badge" role="listitem">WhatsApp Business API</span>
+          <span class="tech-badge" role="listitem">Meta Cloud API</span>
+          <span class="tech-badge" role="listitem">REST API</span>
+        </div>
+        <div class="project-links">
+          <button type="button" class="project-link-btn" onclick="openSystemModal('whatlead')" aria-label="View WhatLead system screenshots">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            View System
+          </button>
+        </div>
+      </article>
 
     </div>
   </div>
@@ -1823,6 +2107,7 @@
       </div>
       <nav class="footer-links" aria-label="Footer navigation">
         <a href="#about">About</a>
+        <a href="#systems">Systems</a>
         <a href="#projects">Projects</a>
         <a href="#services">Services</a>
         <a href="#contact">Contact</a>
@@ -1831,13 +2116,150 @@
   </div>
 </footer>
 
+<!-- ═══════════════════════ MODAL FOR SYSTEM SCREENSHOTS ═══════════════════════ -->
+<div id="systemModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitle" class="modal-title"></h3>
+      <button type="button" class="modal-close" onclick="closeSystemModal()" aria-label="Close modal">&times;</button>
+    </div>
+    <div class="slider-container">
+      <div class="slider-wrapper">
+        <div class="slider-track" id="sliderTrack"></div>
+        <button type="button" class="slider-arrow prev" onclick="prevSlide()" aria-label="Previous slide">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button type="button" class="slider-arrow next" onclick="nextSlide()" aria-label="Next slide">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <div class="slider-dots" id="sliderDots"></div>
+    </div>
+  </div>
+</div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false">
   // ─── Mark JS as loaded so animations work safely ───
   document.body.classList.add('js-loaded');
 
   // ─── Set current year in footer ───
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ─── System Modal & Slider ───
+  const systemScreenshots = {
+    lead2call: {
+      title: 'Lead2Call — Automated Lead-to-Call Platform',
+      images: [
+        { src: 'images/systems/lead2call-dashboard.webp', caption: 'Dashboard - Real-time overview with lead statistics and activity' },
+        { src: 'images/systems/lead2call-leads.webp', caption: 'Leads Management - Filter, search, and track all incoming enquiries' },
+        { src: 'images/systems/lead2call-dealerships.webp', caption: 'Dealerships - Multi-dealership configuration and management' },
+        { src: 'images/systems/lead2call-users.webp', caption: 'User Management - Role-based access control for admins and salespeople' },
+        { src: 'images/systems/lead2call-settings.webp', caption: 'System Settings - Configure call timeouts, processing percentages, and notifications' },
+        { src: 'images/systems/lead2call-audit.webp', caption: 'Audit Logs - Complete system activity tracking with IP and device info' },
+        { src: 'images/systems/lead2call-api.webp', caption: 'API Tokens - Secure API authentication with dealership-level access control' }
+      ]
+    },
+    whatlead: {
+      title: 'WhatLead — WhatsApp Business Lead Platform',
+      images: [
+        { src: 'images/systems/whatlead-services.webp', caption: 'Services - Workflow automation configuration with templates and steps' },
+        { src: 'images/systems/whatlead-template.webp', caption: 'Template Details - WhatsApp message template with parameter mapping' },
+        { src: 'images/systems/whatlead-templates.webp', caption: 'Templates - Message template library with deployment status' },
+        { src: 'images/systems/whatlead-apps.webp', caption: 'WhatsApp Apps - Business account integration with Meta validation' },
+        { src: 'images/systems/whatlead-conversations.webp', caption: 'Conversations - Live WhatsApp conversation tracking per dealership' },
+        { src: 'images/systems/whatlead-lead-detail.webp', caption: 'Lead Details - Complete lead view with automation steps and vehicle info' },
+        { src: 'images/systems/whatlead-service-detail.webp', caption: 'Service Configuration - Assigned templates and workflow automation steps' },
+        { src: 'images/systems/whatlead-leads.webp', caption: 'Leads Overview - Full lead pipeline with status, service, and salesperson tracking' },
+        { src: 'images/systems/whatlead-dealerships.webp', caption: 'Dealerships - Multi-location management with WhatsApp number assignment' },
+        { src: 'images/systems/whatlead-users.webp', caption: 'Users - Role-based permissions for admins, salespeople, and developers' },
+        { src: 'images/systems/whatlead-salesmen.webp', caption: 'Salesmen - Active salesperson roster with dealership and lead assignments' }
+      ]
+    }
+  };
+
+  let currentSystem = null;
+  let currentSlideIndex = 0;
+
+  function openSystemModal(system) {
+    currentSystem = system;
+    currentSlideIndex = 0;
+    const data = systemScreenshots[system];
+    
+    document.getElementById('modalTitle').textContent = data.title;
+    
+    // Build slider
+    const sliderTrack = document.getElementById('sliderTrack');
+    sliderTrack.innerHTML = data.images.map(img => 
+      `<div class="slider-slide">
+        <img src="${img.src}" alt="${img.caption}" loading="lazy" />
+      </div>`
+    ).join('');
+    
+    // Build dots
+    const sliderDots = document.getElementById('sliderDots');
+    sliderDots.innerHTML = data.images.map((_, i) => 
+      `<div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})" role="button" aria-label="Go to slide ${i + 1}"></div>`
+    ).join('');
+    
+    document.getElementById('systemModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    updateSlider();
+  }
+
+  function closeSystemModal() {
+    document.getElementById('systemModal').classList.remove('active');
+    document.body.style.overflow = '';
+    currentSystem = null;
+  }
+
+  function updateSlider() {
+    const track = document.getElementById('sliderTrack');
+    track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+    
+    // Update dots
+    document.querySelectorAll('.slider-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentSlideIndex);
+    });
+  }
+
+  function nextSlide() {
+    if (!currentSystem) return;
+    const maxIndex = systemScreenshots[currentSystem].images.length - 1;
+    currentSlideIndex = currentSlideIndex < maxIndex ? currentSlideIndex + 1 : 0;
+    updateSlider();
+  }
+
+  function prevSlide() {
+    if (!currentSystem) return;
+    const maxIndex = systemScreenshots[currentSystem].images.length - 1;
+    currentSlideIndex = currentSlideIndex > 0 ? currentSlideIndex - 1 : maxIndex;
+    updateSlider();
+  }
+
+  function goToSlide(index) {
+    currentSlideIndex = index;
+    updateSlider();
+  }
+
+  // Expose modal/slider functions globally (required when Cloudflare Rocket Loader is active)
+  window.openSystemModal = openSystemModal;
+  window.closeSystemModal = closeSystemModal;
+  window.nextSlide = nextSlide;
+  window.prevSlide = prevSlide;
+  window.goToSlide = goToSlide;
+
+  // Close modal on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && currentSystem) closeSystemModal();
+    if (e.key === 'ArrowRight' && currentSystem) nextSlide();
+    if (e.key === 'ArrowLeft' && currentSystem) prevSlide();
+  });
+
+  // Close modal on overlay click
+  document.getElementById('systemModal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'systemModal') closeSystemModal();
+  });
 
   // ─── Scroll Progress Bar ───
   const scrollProgress = document.getElementById('scroll-progress');
@@ -1927,7 +2349,7 @@
 
   // ─── Form submission ───
   const form = document.getElementById('contact-form');
-  form.addEventListener('submit', async (e) => {
+  if (form) form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = form.querySelector('.form-submit');
     const originalHTML = btn.innerHTML;
