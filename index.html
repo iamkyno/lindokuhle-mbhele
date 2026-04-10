@@ -1819,7 +1819,7 @@
   <div class="container">
     <div class="footer-inner">
       <div class="footer-copy">
-        © 2025 <span>Lindokuhle Mbhele</span> — Built with passion & precision.
+        © <span id="year"></span> <span>Lindokuhle Mbhele</span> — Built with passion & precision.
       </div>
       <nav class="footer-links" aria-label="Footer navigation">
         <a href="#about">About</a>
@@ -1835,6 +1835,9 @@
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ─── Mark JS as loaded so animations work safely ───
   document.body.classList.add('js-loaded');
+
+  // ─── Set current year in footer ───
+  document.getElementById('year').textContent = new Date().getFullYear();
 
   // ─── Scroll Progress Bar ───
   const scrollProgress = document.getElementById('scroll-progress');
