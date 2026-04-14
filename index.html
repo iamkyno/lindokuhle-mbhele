@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1202,83 +1203,70 @@
       border-radius: 16px;
       overflow: hidden;
     }
-    .slider-wrapper {
-      position: relative;
-      padding-bottom: 60%;
-    }
-    .slider-track {
-      display: flex;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
+    .system-swiper {
       width: 100%;
+      aspect-ratio: 16 / 9;
     }
-    .slider-slide {
-      flex: 0 0 100%;
+    .system-swiper .swiper-slide {
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #0a0a0a;
       padding: 20px;
     }
-    .slider-slide img {
+    .system-swiper .swiper-slide img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
       border-radius: 8px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      display: block;
     }
-    .slider-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(127, 255, 212, 0.2);
+    /* Swiper nav arrows */
+    .system-swiper .swiper-button-prev,
+    .system-swiper .swiper-button-next {
+      width: 46px;
+      height: 46px;
+      background: rgba(13, 13, 13, 0.8);
       border: 1px solid var(--accent);
-      color: var(--bright);
-      width: 50px;
-      height: 50px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 10;
+      color: var(--accent);
+      transition: background 0.25s ease, transform 0.25s ease;
     }
-    .slider-arrow:hover {
-      background: rgba(127, 255, 212, 0.3);
-      transform: translateY(-50%) scale(1.1);
+    .system-swiper .swiper-button-prev:hover,
+    .system-swiper .swiper-button-next:hover {
+      background: rgba(200, 241, 53, 0.15);
+      transform: scale(1.08);
     }
-    .slider-arrow.prev { left: 20px; }
-    .slider-arrow.next { right: 20px; }
-    .slider-dots {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.3);
+    .system-swiper .swiper-button-prev::after,
+    .system-swiper .swiper-button-next::after {
+      font-size: 16px;
+      font-weight: 700;
     }
-    .slider-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
+    /* Swiper pagination bullets */
+    .system-swiper .swiper-pagination {
+      bottom: 10px;
+    }
+    .system-swiper .swiper-pagination-bullet {
       background: rgba(255, 255, 255, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      cursor: pointer;
-      transition: all 0.3s ease;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: background 0.25s ease, transform 0.25s ease;
     }
-    .slider-dot.active {
+    .system-swiper .swiper-pagination-bullet-active {
       background: var(--accent);
-      border-color: var(--accent);
-      transform: scale(1.2);
+      transform: scale(1.3);
     }
+    /* Caption below slider */
     .slider-caption {
       text-align: center;
-      padding: 15px;
+      padding: 12px 20px;
       color: var(--muted);
-      font-size: 0.9rem;
-      background: rgba(0, 0, 0, 0.3);
+      font-size: 0.85rem;
+      background: rgba(0, 0, 0, 0.35);
+      min-height: 42px;
+      line-height: 1.4;
     }
 
     /* ═══════════════════════════════════════════
@@ -1727,7 +1715,7 @@
           <span class="tech-badge" role="listitem">MySQL</span>
         </div>
         <div class="project-links">
-          <button type="button" class="project-link-btn" onclick="openSystemModal('lead2call')" aria-label="View Lead2Call system screenshots">
+          <button type="button" class="project-link-btn" data-system="lead2call" onclick="openSystemModal('lead2call')" aria-label="View Lead2Call system screenshots">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             View System
           </button>
@@ -1757,7 +1745,7 @@
           <span class="tech-badge" role="listitem">REST API</span>
         </div>
         <div class="project-links">
-          <button type="button" class="project-link-btn" onclick="openSystemModal('whatlead')" aria-label="View WhatLead system screenshots">
+          <button type="button" class="project-link-btn" data-system="whatlead" onclick="openSystemModal('whatlead')" aria-label="View WhatLead system screenshots">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             View System
           </button>
@@ -2034,7 +2022,7 @@
             <div class="contact-link-icon" aria-hidden="true">✉️</div>
             <div class="contact-link-text">
               <div class="contact-link-label">EMAIL</div>
-              <div class="contact-link-value"><span class="__cf_email__">mbhelelindo23@gmail.com</span></div>
+              <div class="contact-link-value">mbhelelindo23@gmail.com</div>
             </div>
           </a>
           <a href="tel:+27691650133" class="contact-link-item" role="listitem" aria-label="Call phone number">
@@ -2121,33 +2109,26 @@
   <div class="modal-content">
     <div class="modal-header">
       <h3 id="modalTitle" class="modal-title"></h3>
-      <button type="button" class="modal-close" onclick="closeSystemModal()" aria-label="Close modal">&times;</button>
+      <button type="button" class="modal-close" id="modalCloseBtn" onclick="closeSystemModal()" aria-label="Close modal">&times;</button>
     </div>
     <div class="slider-container">
-      <div class="slider-wrapper">
-        <div class="slider-track" id="sliderTrack"></div>
-        <button type="button" class="slider-arrow prev" onclick="prevSlide()" aria-label="Previous slide">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <button type="button" class="slider-arrow next" onclick="nextSlide()" aria-label="Next slide">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
+      <div class="swiper system-swiper">
+        <div class="swiper-wrapper" id="swiperWrapper"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-pagination"></div>
       </div>
-      <div class="slider-dots" id="sliderDots"></div>
+      <div class="slider-caption" id="sliderCaption"></div>
     </div>
   </div>
 </div>
 
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false">
-  // ─── Mark JS as loaded so animations work safely ───
-  document.body.classList.add('js-loaded');
+<!-- Modal functions — must run before Swiper CDN so functions exist immediately -->
+<script>
+  console.log('Modal script running');
 
-  // ─── Set current year in footer ───
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  // ─── System Modal & Slider ───
-  const systemScreenshots = {
+  var _systemScreenshots = {
     lead2call: {
       title: 'Lead2Call — Automated Lead-to-Call Platform',
       images: [
@@ -2178,88 +2159,79 @@
     }
   };
 
-  let currentSystem = null;
-  let currentSlideIndex = 0;
+  var _swiperInstance = null;
+  var _currentSystem = null;
 
   function openSystemModal(system) {
-    currentSystem = system;
-    currentSlideIndex = 0;
-    const data = systemScreenshots[system];
-    
+    console.log('openSystemModal called:', system);
+    _currentSystem = system;
+    var data = _systemScreenshots[system];
+
     document.getElementById('modalTitle').textContent = data.title;
-    
-    // Build slider
-    const sliderTrack = document.getElementById('sliderTrack');
-    sliderTrack.innerHTML = data.images.map(img => 
-      `<div class="slider-slide">
-        <img src="${img.src}" alt="${img.caption}" loading="lazy" />
-      </div>`
-    ).join('');
-    
-    // Build dots
-    const sliderDots = document.getElementById('sliderDots');
-    sliderDots.innerHTML = data.images.map((_, i) => 
-      `<div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})" role="button" aria-label="Go to slide ${i + 1}"></div>`
-    ).join('');
-    
+
+    var wrapper = document.getElementById('swiperWrapper');
+    wrapper.innerHTML = data.images.map(function(img) {
+      return '<div class="swiper-slide"><img src="' + img.src + '" alt="' + img.caption + '" loading="lazy" /></div>';
+    }).join('');
+
+    var captionEl = document.getElementById('sliderCaption');
+    captionEl.textContent = data.images[0].caption;
+
     document.getElementById('systemModal').classList.add('active');
     document.body.style.overflow = 'hidden';
-    updateSlider();
+
+    if (_swiperInstance) { _swiperInstance.destroy(true, true); _swiperInstance = null; }
+
+    try {
+      _swiperInstance = new Swiper('.system-swiper', {
+        loop: false,
+        keyboard: { enabled: true },
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        on: {
+          slideChange: function() {
+            var idx = this.realIndex;
+            captionEl.textContent = (data.images[idx] && data.images[idx].caption) || '';
+          }
+        }
+      });
+    } catch(e) {
+      console.warn('Swiper init failed:', e);
+    }
   }
 
   function closeSystemModal() {
     document.getElementById('systemModal').classList.remove('active');
     document.body.style.overflow = '';
-    currentSystem = null;
+    if (_swiperInstance) { _swiperInstance.destroy(true, true); _swiperInstance = null; }
+    _currentSystem = null;
   }
 
-  function updateSlider() {
-    const track = document.getElementById('sliderTrack');
-    track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
-    
-    // Update dots
-    document.querySelectorAll('.slider-dot').forEach((dot, i) => {
-      dot.classList.toggle('active', i === currentSlideIndex);
+  document.querySelectorAll('[data-system]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      openSystemModal(btn.getAttribute('data-system'));
     });
-  }
-
-  function nextSlide() {
-    if (!currentSystem) return;
-    const maxIndex = systemScreenshots[currentSystem].images.length - 1;
-    currentSlideIndex = currentSlideIndex < maxIndex ? currentSlideIndex + 1 : 0;
-    updateSlider();
-  }
-
-  function prevSlide() {
-    if (!currentSystem) return;
-    const maxIndex = systemScreenshots[currentSystem].images.length - 1;
-    currentSlideIndex = currentSlideIndex > 0 ? currentSlideIndex - 1 : maxIndex;
-    updateSlider();
-  }
-
-  function goToSlide(index) {
-    currentSlideIndex = index;
-    updateSlider();
-  }
-
-  // Expose modal/slider functions globally (required when Cloudflare Rocket Loader is active)
-  window.openSystemModal = openSystemModal;
-  window.closeSystemModal = closeSystemModal;
-  window.nextSlide = nextSlide;
-  window.prevSlide = prevSlide;
-  window.goToSlide = goToSlide;
-
-  // Close modal on escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && currentSystem) closeSystemModal();
-    if (e.key === 'ArrowRight' && currentSystem) nextSlide();
-    if (e.key === 'ArrowLeft' && currentSystem) prevSlide();
   });
-
-  // Close modal on overlay click
-  document.getElementById('systemModal')?.addEventListener('click', (e) => {
+  var closeBtn = document.getElementById('modalCloseBtn');
+  if (closeBtn) closeBtn.addEventListener('click', closeSystemModal);
+  var overlay = document.getElementById('systemModal');
+  if (overlay) overlay.addEventListener('click', function(e) {
     if (e.target.id === 'systemModal') closeSystemModal();
   });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && _currentSystem) closeSystemModal();
+  });
+</script>
+
+<!-- Swiper loaded with defer so it never blocks page execution -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+
+<script>
+  // ─── Mark JS as loaded so animations work safely ───
+  document.body.classList.add('js-loaded');
+
+  // ─── Set current year in footer ───
+  document.getElementById('year').textContent = new Date().getFullYear();
 
   // ─── Scroll Progress Bar ───
   const scrollProgress = document.getElementById('scroll-progress');
@@ -2428,3 +2400,5 @@
     });
   }
 </script>
+</body>
+</html>
