@@ -73,6 +73,18 @@
       box-shadow: 0 0 10px rgba(200, 241, 53, 0.5);
     }
 
+    /* BOTTOM FADE SHADOW */
+    .black-shadow {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: linear-gradient(to bottom, transparent, #000000);
+      z-index: 9999;
+      pointer-events: none;
+    }
+
     /* SCROLLBAR */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
@@ -1079,9 +1091,11 @@
       justify-content: space-between;
     }
     .footer-copy {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--body);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--body);
+        z-index: 99999;
+        position: relative;
     }
     .footer-copy span { color: var(--accent); }
     .footer-links {
@@ -1349,6 +1363,7 @@
 
 <!-- ═══════════════════════ SCROLL PROGRESS BAR ═══════════════════════ -->
 <div id="scroll-progress" aria-hidden="true"></div>
+<div class="black-shadow" aria-hidden="true"></div>
 
 <!-- ═══════════════════════ NAV ═══════════════════════ -->
 <nav id="main-nav" role="navigation" aria-label="Main navigation">
@@ -1643,6 +1658,7 @@
           <span class="skill-tag" role="listitem">Backup & Restore</span>
           <span class="skill-tag" role="listitem">Uptime Monitoring</span>
           <span class="skill-tag" role="listitem">Linux Server Basics</span>
+          <span class="skill-tag" role="listitem">Linux CLI (mkdir, rmdir, nano, sudo)</span>
           <span class="skill-tag" role="listitem">Apache</span>
         </div>
       </div>
@@ -1914,7 +1930,7 @@
         <p class="project-desc">
           Complete hosting setup and management including cPanel/WHM administration, DNS configuration, 
           SSL certificate installation, and email setup. Perform seamless website migrations between 
-          hosting providers with zero downtime. Daily SEO improvements, technical audits, performance 
+          hosting providers with minimal downtime. Daily SEO improvements, technical audits, performance 
           optimization, and Core Web Vitals monitoring using GTmetrix and Google Analytics.
         </p>
         <p class="project-problem">"Performed 30+ successful site migrations with careful planning and testing."</p>
@@ -1973,8 +1989,8 @@
       <div class="service-card reveal" role="article">
         <div class="service-icon" aria-hidden="true">🔄</div>
         <div class="service-title">Website Migrations</div>
-        <p class="service-desc">Seamless site migrations between hosts with zero downtime, DNS updates, and SSL transfers.</p>
-        <span class="service-badge">Zero Downtime · SSL · DNS</span>
+        <p class="service-desc">Seamless site migrations between hosts with minimal downtime, DNS updates, and SSL transfers.</p>
+        <span class="service-badge">Minimal Downtime · SSL · DNS</span>
       </div>
 
       <div class="service-card reveal reveal-delay-1" role="article">
@@ -2123,7 +2139,8 @@
   </div>
 </div>
 
-
+<div class="black-shadow">
+</div>
 <!-- Modal functions — must run before Swiper CDN so functions exist immediately -->
 <script>
   console.log('Modal script running');
